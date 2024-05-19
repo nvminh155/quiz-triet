@@ -12,14 +12,6 @@
         font-family: "Times New Roman";
         font-size: 14pt;
       }
-      h1,
-      p {
-        margin: 0pt 0.6pt 5.35pt 1.2pt;
-      }
-      li {
-        margin-top: 0pt;
-        margin-bottom: 5.35pt;
-      }
       h1 {
         margin-left: 0.85pt;
         margin-bottom: 5.55pt;
@@ -10036,19 +10028,55 @@
       </li>
     </ol>
     <script>
-      const ans = [];
-      var spans = document.getElementsByTagName("span");
-      //console.log(111, spans);
-      for (var i = 0; i < spans.length; i++) {
-        var span = spans[i];
-        var style = span.attributes[0];
-        if (style && style.textContent === "color: #ff0000") {
-          span.attributes[0].textContent = "";
-          span.addEventListener("click", function checkCorrect(params) {
-            params.srcElement.attributes[0].textContent = "color: #00ff00";
+
+      function addmore() {
+        var ols = document.querySelectorAll("ol");
+        ols.forEach( (ol, no) => {
+          const lis = ol.querySelectorAll("li");
+          lis.forEach((li, id) => {
+            const input = document.createElement("input");
+            input.type = "radio";
+            input.name = `#question${no}`;
+
+            const text = document.createElement("p");
+            text.innerHTML = ["A", "B", "C", "D"].find((c, i) => i === id) +  ". " + li.innerHTML;
+
+            const isAns = text.querySelector('span')
+          
+            if(isAns) {
+              isAns.style.color = "";
+              li.querySelector('span').style.cssText = ""
+            }
+            li.innerHTML = "";
+
+            li.append(...[input, text])
+            li.style.cssText = `
+              display: flex;
+              align-items: center;
+              gap: 0 10px;
+            `
+
+            li.addEventListener('click', (e) => {
+              const parent = li.parentNode;
+              console.log(parent)
+              const span = text.querySelector('span');
+
+              parent.querySelectorAll('li').forEach((s) => {
+                s.style.color = "black"
+                s.style.fontWeight = ''
+              })
+              if(isAns) {
+                li.style.color = "green";
+              } else {
+                li.style.color = "#ff0000";
+              }
+              li.style.fontWeight = '600'
+            })
           })
-        }
+        })
       }
+      addmore()
+
     </script>
   </body>
 </html>
